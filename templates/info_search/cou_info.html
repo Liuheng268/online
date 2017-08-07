@@ -1,0 +1,80 @@
+{% extends "info_search/base.html" %}
+
+{% block mainbody %}
+<div class="row clearfix">
+<div class="col-md-9 column">				
+		<div id="legend">
+			<legend>选修课信息</legend>
+		</div>
+		<a class="btn btn-primary btn-large" href="/online/avr_rating#">按课程名称排列</a>
+		<a class="btn btn-primary btn-large" href="/online/cou_info#">按上课时间排列</a>
+        <div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							课程名称
+						</th>
+						<th>
+							教师姓名
+						</th>
+						<th>
+							上课时间
+						</th>
+						<th>
+							上课地点
+						</th>
+						<th>
+							学分
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for KCMC,JSXM,SKSJ,SKDD,XF in lst %}
+					<tr>
+						<td>
+						{{KCMC}}
+						</td>
+						<td>
+						{{JSXM}}
+						</td>
+						<td>
+						{{SKSJ}}
+						</td>
+						<td>
+						{{SKDD}}
+						</td>
+						<td>
+						{{XF}}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+            </div>
+			<ul class="pagination">
+				<li>
+					 <a href="?a=0">首页</a>
+				</li>
+				<li>
+					 <a href="?a=0">1</a>
+				</li>
+				<li>
+					 <a href="?a=1">2</a>
+				</li>
+				<li>
+					 <a href="?a=2">3</a>
+				</li>
+				<li>
+					 <a href="?a=3">4</a>
+				</li>
+				<li>
+					 <a href="?a=4">5</a>
+				</li>
+				<li>
+					 <a href="#">下一页</a>
+				</li>
+			</ul>
+</div>
+</div>			
+{% endblock %}

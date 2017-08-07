@@ -1,0 +1,82 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}课程详情{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+<div class="container">
+            {% include "_messages.html" %}
+        <div class="row clearfix">
+                    <div class="col-md-9 column">
+                        <div class="jumbotron">
+				<h1>
+				欢迎使用选课推荐系统!
+				</h1>
+				<p>
+				以下课程详情由个性化选课推荐系统根据现有数据收集整理而成，仅供参考。
+				</p>
+                        </div>
+                    </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-9 column">
+			<div id="legend">
+			<legend>历年课程信息</legend>
+            </div>
+            <div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							课程名称
+						</th>
+						<th>
+							授课教师
+						</th>
+						<th>
+							上课时间
+						</th>
+						<th>
+							学分
+						</th>
+						<th>
+							学年
+						</th>
+						<th>
+							其他
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for KCMC,JSXM,SKSJ,XF,XN in detail %}
+					<tr class="info">
+						<td>
+							{{KCMC}}
+						</td>
+						<td>
+							{{JSXM}}
+						</td>
+						<td>
+							{{SKSJ}}
+						</td>
+						<td>
+							{{XF}}
+						</td>
+						<td>
+							{{XN}}
+						</td>
+						<td>
+							……
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+            </div>
+            </div>
+            </div>
+            </div>
+		{% endblock %}

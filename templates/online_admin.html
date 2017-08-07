@@ -1,0 +1,139 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+
+{% block head_title %}用户信息管理中心{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+
+<div class="container">
+    {% include "_messages.html" %}
+        <div class="row clearfix">
+            <div class="col-md-9 column">
+                <div class="jumbotron">
+                           
+                    <h1>
+                        用户信息管理中心
+                    </h1>
+                    <p>
+                        用户注册信息查询系统
+                    </p>
+
+                </div>
+                
+                {% ifequal error 1 %}
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">系统提示</h3>
+                        </div>
+                    <div class="panel-body">
+                        很抱歉！当前登录账号没有用户信息管理权限，请更换具有权限的其他账号登录。
+                    </div>
+                    </div>
+		
+                {% endifequal %}
+            </div>
+        </div>
+        {% ifequal worked 1 %}
+        <div class="row clearfix">
+            <div class="col-md-9 column">
+                <div id="legend">
+                    <legend>用户信息</legend>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <h4>用户名称</h4>
+                                </th>
+                                <th>
+                                    <h4>评分状态</h4>
+                                </th>
+                                <th>
+                                    <h4>年级</h4>
+                                </th>
+                                <th>
+                                    <h4>专业</h4>
+                                </th>
+                                <th>
+                                    <h4>绑定学号</h4>
+                                </th>
+                                <th>
+                                    <h4>评分标准差</h4>
+                                </th>
+                                <th>
+                                    <h4>空课状态</h4>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for username,col_rat,gra,maj,spare_time,bind_id,rat_std in user_info %}
+                            <tr>
+                                <td>
+                                    <h4>{{username}}</h4>
+                                </td>
+                                <td>
+                                    <h4>{{col_rat}}</h4>
+                                </td>
+                                <td>
+                                    <h4>{{gra}}</h4>
+                                </td>
+                                <td>
+                                    <h4>{{maj}}</h4>
+                                </td>
+                                <td>
+                                    <h4>{{bind_id}}</h4>
+                                </td>
+                                <td>
+                                    <h4>{{rat_std}}</h4>
+                                </td>
+                                <td>
+                                    <h4>{{spare_time}}</h4>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="legend">
+                    <legend>统计信息</legend>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h4>用户数量</h4>
+                                </td>
+                                <td>
+                                    {{user_num}}
+                                </td>						
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h4>评分数量</h4>
+                                </td>
+                                <td>
+                                    {{rating_num}}
+                                </td>						
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h4>有效评分数量(std>0.5)</h4>
+                                </td>
+                                <td>
+                                    {{useful_rating_num}}
+                                </td>						
+                            </tr>
+				
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endifequal %}
+</div>
+{% endblock %}

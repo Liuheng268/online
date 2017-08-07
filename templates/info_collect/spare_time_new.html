@@ -1,0 +1,163 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}填写空闲时间{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+<div class="container">
+            {% include "_messages.html" %}
+        <div class="row clearfix">
+                    <div class="col-md-9 column">
+                        <div class="jumbotron">
+				<h1>
+				STEP 4：空闲时间填写
+				</h1>
+				<p>
+				请填写您希望的上课时间与周数，我们将帮您在个性化推荐结果中过滤有<strong>时间冲突</strong>的选修课，节省您的时间，提升您的选课体验。
+				
+				</p>
+                <p>填写完成后，请单击"查看推荐"按钮，获取推荐课程信息</p>
+                        </div>
+                    </div>
+            <div class="col-md-3 column">
+                        <div id="legend">
+                        <br>
+                        
+                        <legend>用户信息</legend>
+                        </div>
+                        <div>
+                        <a class="btn btn-default" href="/online/user_center">个人主页</a>
+                        <h4>用户名：{{user}}</h4>
+                        {% if grade %}
+                        <h4>年级：{{grade}}级</h4>
+                        {% endif %}
+                        {% if major %}
+                        <h4>专业：{{major}}</h4>
+                        {% endif %}
+                        {% if bind_id %}
+                        <h4>绑定学号：{{bind_id}}</h4>
+                        {% endif %}
+                       
+                        </div>
+                    </div>
+        </div>
+
+        
+</div>	
+				
+
+
+<div class="container">	
+<form name='col_spare_time' method="POST" enctype="multipart/form-data">
+{% csrf_token %}			
+	<div class="row clearfix">
+		<div class="col-md-8 column">
+			<div id="legend">
+				<legend>填写空闲时间</legend>
+			</div>
+		</div>
+		<div class="col-md-4 column">
+			<div id="legend">
+				<legend>填写示例</legend>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row clearfix">		
+	
+			<div class="col-md-2 column">
+				<div class="form-group">
+					<label for="name">起始周</label>
+					<input type="text" class="form-control" placeholder="1-18" name='start_week' value='1'>
+				</div>
+			</div>
+			<div class="col-md-2 column">
+				<div class="form-group">
+					<label for="name">结束周</label>
+					<input type="text" class="form-control" placeholder="1-18" name='end_week' value='18'>
+				</div>
+			</div>
+			<div class="col-md-2 column">
+				<div class="form-group">
+				<label for="name">星期</label>
+				<select class="form-control" name='XQ'>
+				<option value='周一'>星期一</option>
+				<option value='周二'>星期二</option>
+				<option value='周三'>星期三</option>
+				<option value='周四'>星期四</option>
+				<option value='周五'>星期五</option>
+				</select>
+				</div>
+			</div>
+			<div class="col-md-2 column">
+				<div class="form-group">
+				<label for="name">上课时间</label>
+				<select class="form-control" name='SKSJ'>
+				<option value='1,2'>1,2节</option>
+				<option value='3,4'>3,4节</option>
+				<option value='5,6'>5,6节</option>
+				<option value='7,8'>7,8节</option>
+				<option value='9,10'>9,10节</option>
+				</select>
+
+				</div>
+			</div>
+			
+			
+			<div class="col-md-4 column">
+				<p>目标时间：周二第1,2节{第3-6周}</p>
+				<p>填写项目：起始周：3//结束周：6(全部填写数字)</p>
+				<p>//周二//1,2节</p>
+				
+			</div>
+			
+			
+			
+
+	</div>
+		
+	<div class="row clearfix">
+	
+		<div class="col-md-6 column">
+		
+		</div>
+		<div class="col-md-1 column">
+			<input type="submit" class="btn btn-primary" value = "添加" />
+            <br>            
+		</div>	
+		<div class="col-md-1 column">
+			<a href="?WC=1" class="btn btn-success" title="计算过程可能需要15s，请耐心等待……">查看推荐</a> 
+        </div>
+		
+	<div id="legend">
+		<br><br>
+		<legend></legend>
+	</div>		
+	</div>
+</form>
+	<div class="row clearfix">
+		<div class="col-md-4 column">
+		<div id="legend">
+				<legend>已选择时间</legend>
+		</div>
+		<table class="table table-striped">
+			<tbody>
+			{% for time in time_lst %}
+				<tr>
+					<td><p>{{time}}</p></td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<a href="?QK=1" class="btn btn-danger">清空</a>
+		</div>
+		
+	</div>
+
+</div>
+{% endblock %}	
+	
+	

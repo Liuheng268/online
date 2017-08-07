@@ -1,0 +1,65 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}个性化学生选课推荐系统{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+    <section class="jumbotron">
+        <div class="container">
+            {% include "_messages.html" %}
+            <h1>{% blocktrans %}欢迎来到<br>个性化选课推荐系统{% endblocktrans %}</h1>
+            <p>
+                {% blocktrans %}
+                <p>
+					此系统将根据您的对已选课程的评分等信息，使用协同过滤推荐系统，产生针对您的个性化课程推荐。为保证推荐的准确性，请您认真填写基本信息及课程评分信息。
+					该系统收集的个人信息将严格保密，只供推荐系统使用。填写该信息则视为您允许推荐系统使用您的评分数据。
+				</p>
+                {% endblocktrans %}
+            </p>
+            {% if not user.is_authenticated %}
+            {% url "account_login" as login_url %}
+            {% url "account_signup" as signup_url %}
+            <p>{% blocktrans %} <a href="{{ login_url }}" class="btn btn-default">登录</a> |  | <a href="{{ signup_url }}" class="btn btn-primary">注册</a> {% endblocktrans %}</p>
+			{% endif %}
+            <p>
+					 <a class="btn btn-primary btn-large" href="/online/bind_id/">绑定学号</a>
+					 <!-- 
+					 <a class="btn btn-primary btn-large" href="/online/col_fac">填写基本信息</a>
+					 -->
+					 <a class="btn btn-primary btn-large" href="/online/col_rat">填写课程评分</a>
+					 <a class="btn btn-primary btn-large" href="/online/spare_time">填写空课信息</a>
+					 <a class="btn btn-primary btn-large" href="/online/user_cf">课程推荐</a>
+                     <a class="btn btn-primary btn-large" href="/online/base_info">课程基础信息</a>
+			</p>
+
+      </div>
+    </section>
+    <section>
+        <div class="container">
+            {{error}}
+					 {% if success %}
+					 <div class="panel panel-success">
+						<div class="panel-heading">
+							<h3 class="panel-title">系统提示</h3>
+						</div>
+						<div class="panel-body">
+						您已成功绑定学号，请点击"课程评分"按钮，填写课程评分信息
+						</div>
+					</div>
+			{% endif %}
+        </div>
+            
+    </section>
+    <section>
+        <div class="container">
+            <p class="lead text-center">
+                {% blocktrans %}
+                
+                {% endblocktrans %}
+            </p>
+        </div>
+    </section>
+{% endblock %}

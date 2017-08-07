@@ -1,0 +1,134 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}评分收集{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+
+<div class="container">
+
+            {% include "_messages.html" %}
+        <div class="row clearfix">
+        <br><br>
+                    <div class="col-md-9 column">
+                        <div class="jumbotron">
+                           
+				<h1>
+				STEP 3:评分收集
+				</h1>
+				<p>
+				课程评分信息收集，正确填写评分信息可以让我们帮您获取<strong>个性化</strong>选课推荐，提升您的选课体验。
+				</p>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 column">
+                        <div id="legend">
+                        <br>
+                        
+                        <legend>用户信息</legend>
+                        </div>
+                        <div>
+                        <a class="btn btn-default" href="/online/user_center">个人主页</a>
+                        <h4>用户名：{{user}}</h4>
+                        {% if grade %}
+                        <h4>年级：{{grade}}级</h4>
+                        {% endif %}
+                        {% if major %}
+                        <h4>专业：{{major}}</h4>
+                        {% endif %}
+                        {% if bind_id %}
+                        <h4>绑定学号：{{bind_id}}</h4>
+                        {% endif %}
+                       
+                        </div>
+                    </div>
+        </div>
+</div>
+<div class="container">				
+    <div class="row clearfix">	
+		<div class="col-md-6 column">
+
+        {% if success %}
+					 <div class="panel panel-success">
+						<div class="panel-heading">
+							<h3 class="panel-title">系统提示</h3>
+						</div>
+						<div class="panel-body">
+						您已成功绑定学号，请根据提示填写课程评分。
+						</div>
+					</div>
+            {% endif %}	
+
+		</div>	
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-9 column">
+<form method = 'post' enctype="multipart/form-data">
+<legend>{{XN}}--第{{XQ}}学期--课程列表</legend>
+<div class="table-responsive">
+	<table class ="table table-striped">
+		<thead>
+			<th>课程代号</td>
+			<th>课程名称</td>
+			<th>授课教师</td>
+			<th style="width:10%">课程评分</td>
+		</thead>
+		<tbody>
+		{% for KCDM,KCMC,BH,JSXM in lst %}
+		<tr class="table" >
+			<td>{{KCDM}}</td>
+			<td>{{KCMC}}</td>
+            <td>{{JSXM}}</td>
+
+			<td style="width:10%">
+			<select class="form-control" name={{BH}} >
+			<option>1</option>
+			<option>2</option>
+			<option selected="selected">3</option>
+			<option>4</option>
+			<option>5</option>
+			</select>
+			</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+    </div>
+    {% csrf_token %}
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+    <input type="submit" class="btn btn-success" value = "提交" />
+        </div>
+        <div class="col-md-2 column">
+    {% if count %}
+    <a href="/online/spare_time" class="btn btn-default" >跳过</a>
+    {% endif %}
+        </div>
+    </div>
+</form>
+	</div>
+		
+
+		<div class="col-md-3 column">
+			<h2>
+				评分标准提示
+			</h2>
+			<p>该评分目的不在于评判教师讲课是否合格。而在于考量课程与自己的适合程度</p>
+            <p>评分高低衡量指标可以参考以下几点：</p><br>
+            <p>1. 该课程是否适合自己选修</p><br>
+            <p>2. 该教师授课方式、风格是否适合自己的学习习惯</p><br>
+            <p>3. 你是否愿意将该课程推荐给别人</p><br>
+            
+			<a class="btn" href="#about">查看系统介绍</a>
+			</p>
+		</div>
+
+	</div>
+    
+</div>
+
+{% endblock %}

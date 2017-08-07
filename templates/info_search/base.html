@@ -1,0 +1,136 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}信息查询{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+<div class="container">
+            {% include "_messages.html" %}
+<br>
+        <div class="row clearfix">
+             <div class="col-md-9 column">
+                <div class="jumbotron">
+
+				<h1>
+				欢迎使用选课推荐系统!
+				</h1>
+				<p>
+				这里是信息查询系统，您可以点击以下按钮浏览相应内容。
+				</p>
+                <div class ="col-md-2 column">
+				<a class="btn btn-primary btn-large" href="/online/avr_rating">平均评分</a>
+                <br>
+                </div>
+                <div class ="col-md-4 column">
+                <a class="btn btn-primary btn-large" href="/online/cou_info?XN=2016-2017&XQ=2">2016-2017-2学期选修课信息</a>
+                <br>
+                </div>
+                <div class ="col-md-4 column">
+				<a class="btn btn-primary btn-large" href="/online/cou_info?XN=2017-2018&XQ=1">2017-2018-1学期选修课信息</a>
+                <br>
+                </div>
+                </div>
+            </div>
+            <div class="col-md-3 column">
+             <br>
+                     <div id="legend">
+                        <br>
+                        
+                        <legend>用户信息</legend>
+                        </div>
+                        <div>
+                        <a class="btn btn-default" href="/online/user_center">个人主页</a>
+                        <h4>用户名：{{user}}</h4>
+                        {% if grade %}
+                        <h4>年级：{{grade}}级</h4>
+                        {% endif %}
+                        {% if major %}
+                        <h4>专业：{{major}}</h4>
+                        {% endif %}
+                        {% if bind_id %}
+                        <h4>绑定学号：{{bind_id}}</h4>
+                        {% endif %}
+                       
+                        </div>
+              </div>
+          </div>
+
+{% block mainbody %}
+<div class="row clearfix">
+<div class="col-md-5 column">
+		<div id="legend">
+			<legend>平均评分</legend>
+		</div>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>
+							课程编号
+						</th>
+						<th>
+							课程名称
+						</th>
+						<th>
+							授课教师
+						</th>
+						<th>
+							预测评分
+						</th>
+						<th>
+							详情信息
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for xkkh,cou_name,jsxm,rating,BH in rank %}
+					<tr class="info">
+						<td>
+						{{xkkh}}
+						</td>
+						<td>
+						{{cou_name}}
+						</td>
+						<td>
+						{{jsxm}}
+						</td>
+						<td>
+						{{rating}}
+						</td>
+						<td>
+							<a href="?BH={{BH}}" target='_blank'>点击查看课程详情</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			<ul class="pagination">
+				<li>
+					 <a href="?a=0">首页</a>
+				</li>
+				<li>
+					 <a href="?a=0">1</a>
+				</li>
+				<li>
+					 <a href="?a=1">2</a>
+				</li>
+				<li>
+					 <a href="?a=2">3</a>
+				</li>
+				<li>
+					 <a href="?a=3">4</a>
+				</li>
+				<li>
+					 <a href="?a=4">5</a>
+				</li>
+				<li>
+					 <a href="#">下一页</a>
+				</li>
+			</ul>
+        </div>
+        </div>
+{% endblock %}
+{% endblock %}

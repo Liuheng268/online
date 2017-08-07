@@ -1,0 +1,97 @@
+{% extends "info_search/base.html" %}
+
+{% block mainbody %}
+<div class="row clearfix">
+<div class="col-md-9 column">
+    {% ifequal error 1 %}
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">系统提示</h3>
+			</div>
+			<div class="panel-body">
+				很抱歉！ 由于本系统仍处于测试阶段，系统数据量局限，没有更多符合您要求的推荐课程。想获取更多、更准确的推荐，您可以邀请更多的同学参与系统评分。
+			</div>
+		</div>
+	{% endifequal %}
+    {% ifequal worked 1%}
+		<div id="legend">
+			<legend>平均评分<h5>(只显示评分人数>5的课程)</h5></legend>
+		</div>
+        <div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							课程编号
+						</th>
+						<th>
+							课程名称
+						</th>
+						<th>
+							授课教师
+						</th>
+						<th>
+							平均评分
+						</th>
+                        <th>
+							评分人数
+						</th>
+						<th>
+							详情信息
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for xkkh,cou_name,jsxm,rating,BH,user_count in rank %}
+					<tr>
+						<td>
+						{{xkkh}}
+						</td>
+						<td>
+						{{cou_name}}
+						</td>
+						<td>
+						{{jsxm}}
+						</td>
+						<td>
+						{{rating}}
+						</td>
+                        <td>
+						{{user_count}}
+						</td>
+						<td>
+							<a href="?BH={{BH}}" target='_blank'>详情</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+            </div>
+            <ul class="pagination">
+				<li>
+					 <a href="?a=0">首页</a>
+				</li>
+				<li>
+					 <a href="?a=0">1</a>
+				</li>
+				<li>
+					 <a href="?a=50">2</a>
+				</li>
+				<li>
+					 <a href="?a=100">3</a>
+				</li>
+				<li>
+					 <a href="?a=150">4</a>
+				</li>
+				<li>
+					 <a href="?a=200">5</a>
+				</li>
+				<li>
+					 <a href="#">下一页</a>
+				</li>
+            </ul>
+            {% endifequal %}
+</div>
+</div>          
+		
+{% endblock %}

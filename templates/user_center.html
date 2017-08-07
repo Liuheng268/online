@@ -1,0 +1,156 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+
+{% block head_title %}用户中心{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+
+<div class="container">
+            {% include "_messages.html" %}
+        <div class="row clearfix">
+                    <div class="col-md-9 column">
+                        <div class="jumbotron">
+                           
+				<h1>
+				用户中心
+				</h1>
+				<p>
+				以下是您的个人信息，您可以根据提示对其进行更改。
+				</p>
+
+                        </div>
+                    </div>
+        </div>
+        
+        <div class="row clearfix">
+            <div class="col-md-9 column">
+            <div id="legend">
+        <legend>个人信息</legend>
+    </div>
+    <div class="table-responsive">
+	<table class="table table-striped">
+				<tbody>
+					<tr>
+						<td>
+						<h4>用户名</h4>
+						</td>
+						<td>
+						<h4>{{user}}</h4>
+						</td>
+						<td>
+						
+						</td>
+						
+					</tr>
+					<tr>
+						<td>
+						<h4>年级</h4>
+						</td>
+						<td>
+						<h4>{{grade}}级</h4>
+						</td>
+						<td>
+						<!--
+                        <a href="?update_bind_id=1" class="btn btn-default" >更改</a>
+                        -->
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<h4>专业</h4>
+						</td>
+						<td>
+						<h4>{{major}}</h4>
+						</td>
+						<td>
+                        <!--
+						<a href="?update_bind_id=1" class="btn btn-default" >更改</a>
+                        -->
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<h4>绑定学号</h4>
+						</td>
+						<td>
+						<h4>{{bind_id}}</h4>
+						</td>
+						<td>
+                        <!--
+						<a href="?update_bind_id=1" class="btn btn-default" >更改</a>
+                        -->
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<h4>评分填写状态</h4>
+						</td>
+						<td>
+						<h4>{{col_rating}}</h4>
+						</td>
+						<td>
+						<a href="?update_rating=1" class="btn btn-success" >重新填写评分</a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<h4>已选"校选修课"课程数</h4>
+						</td>
+						<td>
+						<h4>{{xuanxiu_num}}</h4>
+						</td>
+						<td>
+                        (包括选修但未通过的课程）
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<h4>已选修学分</h4>
+						</td>
+						<td>
+						<h4>{{xuanxiu_XF}}</h4>
+						</td>
+						<td>
+                        (包括选修但未通过的课程）
+						</td>
+					</tr>
+				</tbody>
+	</table>
+    </div>
+    <div id="legend">
+        <legend>空闲时间列表</legend>
+    </div>
+    <div class="table-responsive">
+    <table class="table table-striped">
+
+				<tbody>
+
+                {% for time in spare_time %}
+					<tr>
+
+						<td>
+						<h4>{{time}}</h4>
+						</td>
+                        <td>
+						
+						</td>						
+					</tr>
+				{% endfor %}
+                <tr>
+
+						<td>
+						
+						</td>
+                        <td>
+						<a href="?update_spare_time=1" class="btn btn-success" >更改空闲时间</a>
+						</td>						
+					</tr>
+				</tbody>
+	</table>
+    </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

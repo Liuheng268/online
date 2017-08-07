@@ -1,0 +1,92 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}基础信息收集{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+
+<div class="container">
+            {% include "_messages.html" %}
+        <div class="row clearfix">
+                    <div class="col-md-9 column">
+                        <div class="jumbotron">
+				<h1>
+				STEP 2：绑定学号
+				</h1>
+				<p>
+				绑定学号可以帮助您更便捷的填写评分信息，提升您的使用体验。
+				</p>
+</div>				
+</div>				
+</div>
+<div class="row clearfix">	
+		<div class="col-md-6 column">
+
+       {% if not cou_lst %}
+	<form method = 'get' class="form-horizontal" enctype="multipart/form-data">
+		{% csrf_token %}
+		{% if error %}
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">系统提示</h3>
+			</div>
+			<div class="panel-body">
+				您选择的课程有误，无法确认身份，请重试。
+			</div>
+		</div>
+		{% endif %}
+    <fieldset>
+	
+      <div id="legend">
+        <legend>绑定学号</legend>
+      </div>
+    <div class="control-group">
+          <!-- Text input-->
+          <label class="control-label" name="input">请输入您想绑定的学号</label>
+          <div class="controls">
+
+            <input class="form-control" type="text" name = 'input' placeholder="1151180000">
+
+            <p class="help-block">提示：学号为10位数校园卡号</p>
+          </div>
+        </div>
+
+    </fieldset>
+    <br>
+	<input type="submit" class="btn btn-primary" value = "验证" />
+	{% endif %}	
+	
+</form>
+</div>	
+</div>
+<br>
+<div class="row clearfix">	
+		<div class="col-md-6 column">
+<form method = 'post' class="form-horizontal" enctype="multipart/form-data">
+		{% if cou_lst %}
+        <legend>身份验证</legend>
+		<label for="name">请从下列选修课中选择所有你选过的选修课</label>
+        <p class="help-block">提示：请不要选择2016-2017下学期选修的课程</p>
+		{% endif %}
+		
+		{% csrf_token %}
+		
+		{% for BH,KCMC in cou_lst %}
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="{{BH}}" name ='select'>{{KCMC}}
+				</label>
+			</div>
+		{% endfor %}
+		{% if cou_lst %}
+        <br>
+		<input type="submit" class="btn btn-primary" value = "下一步" />
+		{% endif %}
+		
+</form>
+</div>	
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+
+static/
+*.pyc
+user_password.py
+static/font-awesome/fonts/fontawesome-webfont.ttf
+static/font-awesome/fonts/FontAwesome.otf
+static/font-awesome/less/bordered-pulled.less
+*.less
+*.scss
+*.svg
+*.ttf
+*.woff
+*.woff2

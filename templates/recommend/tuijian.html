@@ -1,0 +1,241 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}课程推荐{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body_base %}
+<div class="container">
+            {% include "_messages.html" %}
+<br>
+        <div class="row clearfix">
+             <div class="col-md-9 column">
+                <div class="jumbotron">
+
+				<h1>
+				欢迎使用选课推荐系统!
+				</h1>
+				<p>
+					为您推荐的课程将根据您的个人选课评分数据等信息，利用基于（项目）用户的协同过滤推荐系统生成。要获得尽可能准确的课程推荐，请根据个人情况认真填写已选课程评分。
+				</p>
+             </div>
+				
+                
+                
+	{% ifequal error 1 %}
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">系统提示</h3>
+			</div>
+			<div class="panel-body">
+				很抱歉！由于本系统仍处于测试阶段，系统数据量局限，系统评分数据库中与您有相同评分项目的用户数量低于产生合理推荐的阈值，无法为您生成推荐结果。<br>您可以邀请同专业或相近专业的同学参与评分，丰富系统数据，我为人人，人人为我。谢谢您的理解。
+			</div>
+		</div>
+		
+	{% endifequal %}
+
+	{% ifequal error 2 %}
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">系统提示</h3>
+			</div>
+			<div class="panel-body">
+				很抱歉！ 由于本系统仍处于测试阶段，系统数据量局限，没有更多符合您要求的推荐课程。想获取更多、更准确的推荐，您可以邀请更多的同学参与系统评分。
+			</div>
+		</div>
+	{% endifequal %}
+    {% ifequal notworked 1 %}
+    <div id="legend">
+			<legend>平均评分</legend>
+		</div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							课程编号
+						</th>
+						<th>
+							课程名称
+						</th>
+						<th>
+							授课教师
+						</th>
+						<th>
+							平均评分
+						</th>
+                        <th>
+							评分人数
+						</th>
+						<th>
+							详情信息
+						</th>
+					</tr>
+				</thead>
+                <tbody>
+				{% for xkkh,cou_name,jsxm,rating,BH,user_rat_num in rank %}
+					<tr>
+						<td>
+						{{xkkh}}
+						</td>
+						<td>
+						{{cou_name}}
+						</td>
+						<td>
+						{{jsxm}}
+						</td>
+						<td>
+						{{rating}}
+						</td>
+                        <td>
+                        {{user_rat_num}}
+						</td>
+						<td>
+							<a href="?BH={{BH}}" target='_blank'>详情</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+        </div>
+    {% endifequal %}
+	{% ifequal worked 1%}
+    <div class="panel panel-success">
+		<div class="panel-heading">
+			<h3 class="panel-title">系统提示</h3>
+		</div>
+		<div class="panel-body">
+			<h4>目前本系统通过两种不同的算法提供推荐内容，您可以通过单击"基于用户推荐"按钮，和"基于课程推荐"按钮，自主选择推荐算法。<br>
+            <br>课程推荐列表在默认情况下会过滤掉您<strong>已选过的课程</strong>和与您下学期课表<strong>有时间冲突</strong>的课程。想查看所有无时间冲突课程，你可以单击"所有无时间冲突课程"按钮。</h4>
+                
+		</div>
+	</div>
+    <div>
+                <p>
+					<a class="btn btn-default" href="/online/user_cf">基于用户的推荐</a>  
+					<a class="btn btn-default" href="/online/item_cf">基于课程的推荐</a>  
+                     <a class="btn btn-default" href="?no_time_conflicit=1">所有无时间冲突课程</a>  
+                </p>
+    </div>
+		<div id="legend">
+			<legend>推荐课程</legend>
+		</div>
+        <div class="table-responsive">
+        <table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							课程编号
+						</th>
+						<th>
+							课程名称
+						</th>
+						<th>
+							授课教师
+						</th>
+						<th>
+							预测评分
+						</th>
+                        <th>
+							预测-平均差
+						</th>
+						<th>
+							详情信息
+						</th>
+					</tr>
+				</thead>
+                <tbody>
+				{% for xkkh,cou_name,jsxm,rating,BH,pre_avr_min in rank %}
+					<tr>
+						<td>
+						{{xkkh}}
+						</td>
+						<td>
+						{{cou_name}}
+						</td>
+						<td>
+						{{jsxm}}
+						</td>
+						<td>
+						{{rating}}
+						</td>
+                        <td>
+                        {{pre_avr_min}}
+						</td>
+						<td>
+							<a href="?BH={{BH}}" target='_blank'>详情</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+            </div>
+	{% endifequal %}
+			
+			<ul class="pagination">
+				<li>
+					 <a href="?a=0">首页</a>
+				</li>
+				<li>
+					 <a href="?a=0">1</a>
+				</li>
+				<li>
+					 <a href="?a=10">2</a>
+				</li>
+				<li>
+					 <a href="?a=20">3</a>
+				</li>
+				<li>
+					 <a href="?a=30">4</a>
+				</li>
+				<li>
+					 <a href="?a=40">5</a>
+				</li>
+				<li>
+					 <a href="#">下一页</a>
+				</li>
+			</ul>
+            </div>
+             
+             
+             <div class="col-md-3 column">
+             <br>
+                     <div id="legend">
+                        <br>
+                        
+                        <legend>用户信息</legend>
+                        </div>
+                        <div>
+                        <a class="btn btn-default" href="/online/user_center">个人主页</a>
+                        <h4>用户名：{{user}}</h4>
+                        {% if grade %}
+                        <h4>年级：{{grade}}级</h4>
+                        {% endif %}
+                        {% if major %}
+                        <h4>专业：{{major}}</h4>
+                        {% endif %}
+                        {% if bind_id %}
+                        <h4>绑定学号：{{bind_id}}</h4>
+                        {% endif %}
+                       
+                        </div>
+                        <p>
+                        <a class="btn btn-primary btn-large" href="/online/avr_rating">课程基础信息查询入口</a>
+                        </p>
+                        <div>
+                        <br><br>
+                            <legend>相关提示</legend>
+                            <div>
+                            <p>
+                    
+                    <p>
+                        "预测-平均差"指课程推荐评分与平均评分之差，值为正，则表示您对该课程的喜爱程度（适合程度）大于平均水平；值为负，则表示您对该课程的喜爱程度（适合程度）小于平均水平。
+                            </div>
+                        </div>
+                               
+                </div>
+</div>
+</div>
+{% endblock %}
