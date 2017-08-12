@@ -32,6 +32,7 @@ def re_user_cf(start,user,n):
         return rec
     else:
         new_rank = Course_filtering(user,result)
+        
         rank_lst = transfer_lst(start,n,new_rank)
         #rank = course_filtering_SKSJ(rank_lst,user)
         rec = add_pre_avr_min(rank_lst)
@@ -58,19 +59,30 @@ def re_item_cf(start,user,n):
     item_cf.__pre_treat(train, False)
     item_cf.item_similarity_cosine(train, iuf=False, implicit=False)
     result = item_cf.recommend_explicit(user)
-    #print list(result)
-    if result ==[]:
+    rank1 = result['rank']
+    explain = result['explain']
+    if rank1 ==[]:
         rec = 'less_than_standard'
         return rec
     else:
-        new_rank = Course_filtering(user,result)
-        rank_lst = transfer_lst(start,n,new_rank)
+        rank2 = Course_filtering(user,rank1)
+        rank3 = transfer_lst(start,n,rank2)
         #print rank_lst
         #rank = course_filtering_SKSJ(rank_lst,user)
-        rec = add_pre_avr_min(rank_lst)
-        #print rec
-        return rec
-
+        rank4 = add_pre_avr_min(rank3)
+        rank5 = add_explain(explain,rank4)
+        return rank5
+def add_explain(explain, rank):
+    explain_lst = list(explain)
+    new_rank = []
+    for item,item1 in explain_lst:
+        KCMC = data_base.get_cou_name(item1)
+        for row in rank:
+            if item == row[4]:
+                new_rank.append([row[0],row[1],row[2],row[3],row[4],row[5],KCMC])
+    #print new_rank
+    new_rank.sort(key=lambda x:x[3] ,reverse=True)
+    return new_rank
 def get_train():
     # 从数据库获取用户评分数据
     train = data_base.create_train()
@@ -78,8 +90,10 @@ def get_train():
 def Course_filtering(user,rank):
     # 过滤用户已选课程及相似课程（不同教师）
     all_BH_list = data_base.course_filtering(user)
+    rank2 = list(rank)
+    rank2.sort(key=lambda x:x[1] ,reverse=True)
     new_rank = []
-    for BH,rating in rank :
+    for BH,rating in rank2 :
         if BH in all_BH_list:
             continue
         else:
@@ -114,7 +128,7 @@ def transfer_lst_to_string(time_lst):
 def transfer_lst(start,n,rank):
     # 将协同过滤算法获得的推荐列表变换成向用户展示的形式
     lst = list(rank)
-    lst = sorted(lst,key=lambda t:t[1],reverse=True)
+    #lst = sorted(lst,key=lambda t:t[1],reverse=True)
     rec = []
     for line in lst[start:start+n]:
         temp = data_base.search_teacher(line[0])
@@ -141,6 +155,7 @@ def add_pre_avr_min(rank):
         for avr_row in avr_rank:
             if row[4]==avr_row[0]:
                 new_rank.append([row[0],row[1],row[2],row[3],row[4],row[3]-avr_row[2]])
+    new_rank.sort(key=lambda x:x[3] ,reverse=True)
     return new_rank
 
 def screening_training_set(train,threshold=0.1):

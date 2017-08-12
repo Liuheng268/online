@@ -58,8 +58,7 @@ def item_similarity_cosine(train, norm=False, iuf=False, implicit=False):
             if norm_value:
                 for item in _w[i]:
                     item[1] /= norm_value
-        if implicit:
-            _w[i].sort(key=operator.itemgetter(1), reverse=True)
+        _w[i].sort(key=operator.itemgetter(1), reverse=True)
 
 
 def item_similarity_jaccard(train, norm=False, iuf=False, implicit=False):
@@ -287,8 +286,39 @@ def recommend_explicit(user):
         if w_sum[item]:
             rank[item] /= w_sum[item]
         rank[item] += _avr[item]
-    return rank.iteritems()
+    explain = recommend_explain(user,rank)
+    result = {}
+    result['rank'] = rank.iteritems()
+    result['explain'] = explain
+    return result
 
+def recommend_explain(user,rank):
+    rank_lst = list(rank.iteritems())
+    #print rank
+    ru = _user_items[user]
+    item_rating = list(_user_items[user].iteritems())
+    item_rating.sort(key=lambda x:x[1] ,reverse=True)
+    #print item_rating
+    mscl = {} #max_sim_cou_lst
+    for j, ruj in item_rating:
+        for i, wji in _w[j]:
+            if j in mscl:
+                mscl[j].append([i,wji])
+            else:
+                mscl[j]= []
+                mscl[j].append([i,wji])
+            mscl[j].sort(key=lambda x:x[1] ,reverse=True)
+    #print mscl
+    explain = {}
+    for item,rating in rank_lst:
+        for key,rating in  item_rating:
+            for row in mscl[key]:
+                if item == row[0]:
+                    if item in explain:
+                        pass
+                    else:
+                        explain[item] = key
+    return explain.iteritems()
 
 def recommend_implicit(user, n, k):
     """

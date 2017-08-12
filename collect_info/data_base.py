@@ -114,6 +114,10 @@ def write_user_info_flag(user_id):
     ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
     ms.ExecNonQuery("update user_info set spare_time =1 where user_id=%d"%user_id)
 
+def update_spare_time_flag(user_id):
+    ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
+    ms.ExecNonQuery("update user_info set spare_time=0  where user_id = %d"%user_id)
+
 if __name__ == '__main__':
     #get_cou_lst(9,'2015-2016',1)
     get_spare_time(9)

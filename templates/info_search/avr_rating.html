@@ -91,6 +91,85 @@
 				</li>
             </ul>
             {% endifequal %}
+            
+            {% ifequal maj_avr 1%}
+		<div id="legend">
+			<legend>"{{maj_name}}"专业选修课平均评分<h5>(只显示评分人数>5的课程)</h5></legend>
+		</div>
+        <div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>
+							课程编号
+						</th>
+						<th>
+							课程名称
+						</th>
+						<th>
+							授课教师
+						</th>
+						<th>
+							平均评分
+						</th>
+                        <th>
+							评分人数
+						</th>
+						<th>
+							详情信息
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for xkkh,cou_name,jsxm,rating,BH,user_count in rank %}
+					<tr>
+						<td>
+						{{xkkh}}
+						</td>
+						<td>
+						{{cou_name}}
+						</td>
+						<td>
+						{{jsxm}}
+						</td>
+						<td>
+						{{rating}}
+						</td>
+                        <td>
+						{{user_count}}
+						</td>
+						<td>
+							<a href="?BH={{BH}}" target='_blank'>详情</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+            </div>
+            <ul class="pagination">
+				<li>
+					 <a href="?a=0">首页</a>
+				</li>
+				<li>
+					 <a href="?a=0">1</a>
+				</li>
+				<li>
+					 <a href="?a=50">2</a>
+				</li>
+				<li>
+					 <a href="?a=100">3</a>
+				</li>
+				<li>
+					 <a href="?a=150">4</a>
+				</li>
+				<li>
+					 <a href="?a=200">5</a>
+				</li>
+				<li>
+					 <a href="#">下一页</a>
+				</li>
+            </ul>
+            {% endifequal %}
 </div>
 </div>          
 		

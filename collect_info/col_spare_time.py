@@ -29,6 +29,7 @@ def write_into_data_base(user_id,time,time_flag):
 
 def delete_spare_time(user_id):
     data_base.delete_spare_time(user_id)
+    data_base.update_spare_time_flag(user_id)
 
 def get_spare_time(user_id):
     time_lst = data_base.get_spare_time(user_id)

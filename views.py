@@ -298,7 +298,12 @@ def user_cf(req):
         if no_time_conflicit:
             rec = recommend.get_2016_2017_2_XXK(user_id)
             dic['rank'] = rec
-            print 'location_:user_cf__id_:02-02' 
+            print 'location_:user_cf__id_:02-02'
+            flag = data_base.get_spare_time_flag(user_id)
+            if flag ==0:
+                dic['no_spare_time'] = 1
+            else:
+                dic['spare_time'] = 1
             return render(req,'info_search/no_time_conflicit.html',dic,)
         if BH:
             response = HttpResponseRedirect('/online/detail_BH=%s/'%BH)
@@ -352,6 +357,11 @@ def item_cf(req):
             rec = recommend.get_2016_2017_2_XXK(user_id)
             dic['rank'] = rec
             print 'location_:item_cf__id_:03-02'
+            flag = data_base.get_spare_time_flag(user_id)
+            if flag ==0:
+                dic['no_spare_time'] = 1
+            else:
+                dic['spare_time'] = 1
             return render(req,'info_search/no_time_conflicit.html',dic,)
         if BH:
             response = HttpResponseRedirect('/online/detail_BH=%s/'%BH)
@@ -380,7 +390,7 @@ def item_cf(req):
             rec = s.avr_rating(start,10)
             dic['rank'] = rec
         print 'location_:item_cf__id_:03-06'
-        return render(req,'recommend/tuijian.html',dic,)
+        return render(req,'recommend/item_cf.html',dic,)
     else:
         return HttpResponseRedirect('/online/item_cf')        
         
@@ -432,6 +442,15 @@ def avr_rating(req):
     dic = search.search_user_info(user_id)
     if req.method == 'GET':
         print 'location_:avr_rating__id_:05-01'
+        if 'maj_avr' in req.GET:
+            result_dic = info_search.get_maj_avr(user_id, threshold=5)
+            if result_dic['rank']==[]:
+                dic['error']=1
+            else:
+                dic['maj_avr']=1
+            dic['rank'] = result_dic['rank']
+            dic['maj_name'] = result_dic['maj_name']
+            return render(req,'info_search/avr_rating.html',dic,)
         if 'a' in req.GET:
             opt = req.GET.get('a')
         else:
@@ -540,17 +559,12 @@ def spare_time(req):
             if QK=='1':
                 print 'location_:spare_time__id_:07-02-02'
                 col_spare_time.delete_spare_time(user_id)
-            
         time_lst = col_spare_time.get_spare_time(user_id)
         dic['error'] = 1
         dic['time_lst'] = time_lst
         print 'location_:spare_time__id_:07-03'
         if 'WC' in req.GET:
             print 'location_:spare_time__id_:07-04-01'
-            WC = str(req.GET.get('WC'))
-            if WC=='1':
-                print 'location_:spare_time__id_:07-04-02'
-                col_spare_time.write_user_info_flag(user_id)
             return HttpResponseRedirect('/online/user_cf')
         print 'location_:spare_time__id_:07-05'
         return render(req,'info_collect/spare_time_new.html',dic,)
@@ -559,6 +573,7 @@ def spare_time(req):
         user_id = data_base.get_user_id(username)
         dic = req.POST
         col_spare_time.col_spare_time(user_id,dic)
+        col_spare_time.write_user_info_flag(user_id)
         print 'location_:spare_time__id_:07-06'
         return HttpResponseRedirect('/online/spare_time')
 

@@ -152,7 +152,15 @@ def get_avr():
         BH_lst.append([row[0],row[1],row[2]])
     #print 12 in BH_lst
     return BH_lst
-
+def get_cou_name(BH):
+    ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="XKXX")
+    m = ms.ExecQuery("select KCMC from jxrwb2 where BH =%d"%BH)
+    try:
+        KCMC = m[0][0]
+    except:
+        KCMC = u'查询错误'
+    return KCMC
+    
 
 if __name__ == '__main__':
     #write_user_info('liuheng123')

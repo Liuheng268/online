@@ -34,3 +34,21 @@ def extra_info(new_lst):
     dic['useful_rating_num'] = useful_rating_num
     dic['rating_num'] = rating_num
     return dic
+
+def get_maj_avr(user_id, threshold=5):
+    maj = data_base.get_maj(user_id)
+    maj_name = data_base.get_maj_name(maj)
+    user_tuple_str = data_base.get_maj_user_tuple(maj)
+    #print user_tuple_str
+    item_avr = data_base.get_maj_avr_rating(user_tuple_str,threshold)
+    lst = []
+    for item in item_avr.keys():
+        lst.append([item,item_avr[item]['rating'],item_avr[item]['count']])
+    rank = data_base.transfer_lst(0,0,lst)
+    #for row in rank:
+        #print row
+    dic = {}
+    dic['rank'] = rank
+    dic['maj_name'] = maj_name
+    return dic
+

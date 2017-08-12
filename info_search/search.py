@@ -85,7 +85,7 @@ class SEARCH:
         ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="XKXX")
         m = ms.ExecQuery("select ZYBH from maj_info")
         return m
-    def avr_rating(self,start,n,threshold = 4):
+    def avr_rating(self,start,n,threshold = 5):
         #生成各课程平均评分降序列表
         s=SEARCH()
         item_avr = s.get_avr(threshold)

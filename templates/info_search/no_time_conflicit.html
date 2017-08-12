@@ -4,6 +4,18 @@
 <div class ='container'>
 <div class='row clearfix'>
 <div class = "col-md-9 column">
+{% ifequal no_spare_time 1 %}
+        <div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">系统提示</h3>
+			</div>
+			<div class="panel-body">
+				您未添加空闲时间，请添加后再查看无时间冲突的所有选修课。
+			</div>
+		</div>
+{% endifequal %}
+
+{% ifequal spare_time 1 %}
 		<div id="legend">
 			<legend>无时间冲突课程列表</legend>
 		</div>
@@ -45,6 +57,7 @@
 				</tbody>
 			</table>
             </div>
+ {% endifequal %}
 </div>
 </div>
 </div>			

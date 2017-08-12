@@ -144,14 +144,16 @@
                         <th>
 							预测-平均差
 						</th>
-				
+						<th>
+							推荐依据
+						</th>
                         <th>
 							详情信息
 						</th>
 					</tr>
 				</thead>
                 <tbody>
-				{% for xkkh,cou_name,jsxm,rating,BH,pre_avr_min in rank %}
+				{% for xkkh,cou_name,jsxm,rating,BH,pre_avr_min,KCMC in rank %}
 					<tr>
 						
 						<td>
@@ -165,6 +167,9 @@
 						</td>
                         <td>
                         {{pre_avr_min}}
+						</td>
+                        <td>
+                        {{KCMC}}
 						</td>
 						<td>
 							<a href="?BH={{BH}}" target='_blank'>详情</a>
