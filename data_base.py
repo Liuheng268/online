@@ -339,6 +339,5 @@ if __name__ == '__main__':
     #get_bind_id(9)
     #get_user_info_flag(3)
     online_admin()
-    print '11111111111111111111111111111111111111111111111'
         
         
