@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+#from __future__ import absolute_import
 from __future__ import division
 
 import heapq
 import operator
-
 import numpy
+import data_base
 
 
 def factorization(train, bias=True, svd=True, svd_pp=False, steps=25, gamma=0.04, slow_rate=0.93, Lambda=0.1, k=15,
@@ -190,8 +190,11 @@ def recommend_explicit(user):
     """
     rank = {}
     ru = _user_items[user]
+    BH_lst = data_base.get_all_xuanxiu_BH()
     for item in _movie_set:
         if item in ru:
+            continue
+        if item not in BH_lst:
             continue
         rank[item] = __predict(user, item)
     return rank.iteritems()

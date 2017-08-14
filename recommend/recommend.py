@@ -40,11 +40,27 @@ def re_user_cf(start,user,n):
 
 def re_lfm(start,user,n):
     #根据真实评分数据产生推荐列表
+    #获取原始训练集
     train = data_base.re_get_train()
-    lfm.factorization(train, bias=True, svd=True, svd_pp=False, steps=25, gamma=0.05, slow_rate=0.93, Lambda=0.1)
-    rank = lfm.recommend_explicit(user)
-    rec = transfer_lst(start,n,rank)
-    return rec
+    #过滤无效信息的有效训练集
+    train = screening_training_set(train,threshold = 0.1)
+    #如果有效训练集中不含当前用户，则添加当前用户评分到训练集中备用
+    if user not in train.keys():
+        print 'user not in screening_training_set'
+        user_rating = data_base.get_user_rating(user)
+        train[user] = user_rating
+        print 'adding user rating successfully'
+    lfm.factorization(train, bias=True, svd=True, svd_pp=True, steps=5, gamma=0.03, slow_rate=0.94, Lambda=0.1)
+    result = lfm.recommend_explicit(user)
+    if result ==[]:
+        rec = 'less_than_standard'
+        return rec
+    else:
+        new_rank = Course_filtering(user,result)
+        rank_lst = transfer_lst(start,n,new_rank)
+        #rank = course_filtering_SKSJ(rank_lst,user)
+        rec = add_pre_avr_min(rank_lst)
+        return rec
 
 def re_item_cf(start,user,n):
     train = data_base.re_get_train()

@@ -335,6 +335,7 @@ def user_cf(req):
         return render(req,'recommend/tuijian.html',dic,)
     else:
         return HttpResponseRedirect('/online/user_cf')
+
 @login_required
 def item_cf(req):
     print 'location_:item_cf__id_:03'
@@ -393,6 +394,67 @@ def item_cf(req):
         return render(req,'recommend/item_cf.html',dic,)
     else:
         return HttpResponseRedirect('/online/item_cf')        
+
+@login_required
+def lfm(req):
+    print 'location_:lfm__id_:02'
+    username = str(req.user)
+    user_id = data_base.get_user_id(username)
+    if req.method == 'GET':
+        # 获取翻页信息
+        if 'a' in req.GET:
+            opt = req.GET.get('a')
+        else:
+            opt = 0
+        # 获取详细课程信息
+        if 'BH' in req.GET:
+            BH = req.GET.get('BH')
+        else:
+            BH = 0
+        # 获得个人信息并创建网页信息字典
+        no_time_conflicit =req.GET.get('no_time_conflicit')
+        dic = search.search_user_info(user_id)
+        print 'location_:lfm__id_:02-01'
+        if no_time_conflicit:
+            rec = recommend.get_2016_2017_2_XXK(user_id)
+            dic['rank'] = rec
+            print 'location_:lfm__id_:02-02'
+            flag = data_base.get_spare_time_flag(user_id)
+            if flag ==0:
+                dic['no_spare_time'] = 1
+            else:
+                dic['spare_time'] = 1
+            return render(req,'info_search/no_time_conflicit.html',dic,)
+        if BH:
+            response = HttpResponseRedirect('/online/detail_BH=%s/'%BH)
+            response.set_cookie('BH',BH)
+            print 'location_:lfm__id_:02-03'
+            return response
+        start = 0
+        if opt:
+            start = int(opt)
+        rec = recommend.re_lfm(start,user_id,10)
+        print 'location_:lfm__id_:02-04'
+        if rec =='less_than_standard' :
+            dic['error'] = 1
+            dic['notworked'] = 1
+            s = search.SEARCH()
+            rec = s.avr_rating(start,10)
+            dic['rank'] = rec
+            print 'location_:lfm__id_:02-05'
+        elif rec:
+            dic['rank'] = rec
+            dic['worked'] = 1
+        else:
+            dic['error'] = 2
+            dic['notworked'] =1
+            s = search.SEARCH()
+            rec = s.avr_rating(start,10)
+            dic['rank'] = rec
+            print 'location_:lfm__id_:02-06'
+        return render(req,'recommend/tuijian.html',dic,)
+    else:
+        return HttpResponseRedirect('/online/lfm')
         
 #********************************************************************
 @login_required        
