@@ -327,6 +327,19 @@ def online_admin():
     dic ={}
     dic['user_info'] = user_info
     return dic
+
+def get_first_log_in_flag(user_id):
+    ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
+    m = ms.ExecQuery("select first_log_in from user_info where user_id =%d"%user_id)
+    if m:
+        first_log_in = m[0][0]
+    else:
+        first_log_in = 'not found'
+    return first_log_in
+def close_help(user_id):
+    ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
+    m = ms.ExecNonQuery("update user_info set first_log_in=1 where user_id =%d"%user_id)
+    
 if __name__ == '__main__':
     #write_user_info('liuheng123')
     #maj_dic,sort = search_maj('001')
