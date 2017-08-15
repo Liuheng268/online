@@ -201,7 +201,7 @@ def search_xuanxiu_num_XF(user_id):
     KCXZ = KCXZ.encode('utf-8')
     XH = str(get_XH(user_id))
     m = ms.ExecQuery("SELECT count(KCMC),sum(XF) FROM [XKXX].[dbo].[jxrwb2] as t1 join [XKXX].[dbo].[ZFXFZB_XKXXB_LH] as t2 on t1.XKKH=t2.XKKH where t2.XH='%s' and t1.KCXZ='%s'"%(XH,KCXZ))
-    if m[0][0]!=0:
+    if m[0][0]:
         xuanxiu_num=m[0][0]
     else:
         xuanxiu_num='未找到数据'
@@ -217,8 +217,8 @@ def get_XH(user_id):
     try:
         XH = m[0][0]
     except:
-        XH = '1151180812'
-    return m[0][0]
+        XH = ''
+    return XH
 if __name__ == '__main__':
     #write_user_info('liuheng123')
     #maj_dic,sort = search_maj('001')
