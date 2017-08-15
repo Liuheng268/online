@@ -179,10 +179,13 @@ def col_rating(req):
 def col_rating_new(req):
     username = str(req.user)
     user_id = data_base.get_user_id(username)
+    if 'close_help' in req.GET:
+        data_base.close_help(user_id)
     # 绑定学号成功后提示成功success
     success = int(req.session.get('success',0))
     # 获得个人信息并创建网页信息字典
     dic = search.search_user_info(user_id)
+    first_log_in = data_base.get_first_log_in_flag(user_id)
     print 'location_:col_rating_new__id_:01-01'
     if req.method == 'GET':
         dic1 = col_rat.get_cou_lst(user_id)
@@ -196,6 +199,8 @@ def col_rating_new(req):
                 dic['success'] = '1'
                 req.session['success'] = 0
             print 'location_:col_rating_new__id_:01-03-01'
+            if first_log_in ==0:
+                dic['first_log_in'] = 1
             return render(req,'info_collect/col_rat.html',dic,)
         else:
             # 记录收集评分结束的时间
@@ -280,6 +285,9 @@ def user_cf(req):
     print 'location_:user_cf__id_:02'
     username = str(req.user)
     user_id = data_base.get_user_id(username)
+    if 'close_help' in req.GET:
+        data_base.close_help(user_id)
+    first_log_in = data_base.get_first_log_in_flag(user_id)
     if req.method == 'GET':
         # 获取翻页信息
         if 'a' in req.GET:
@@ -296,14 +304,18 @@ def user_cf(req):
         dic = search.search_user_info(user_id)
         print 'location_:user_cf__id_:02-01'
         if no_time_conflicit:
-            rec = recommend.get_2016_2017_2_XXK(user_id)
-            dic['rank'] = rec
-            print 'location_:user_cf__id_:02-02'
             flag = data_base.get_spare_time_flag(user_id)
+            print 'location_:user_cf__id_:02-02'
             if flag ==0:
                 dic['no_spare_time'] = 1
             else:
                 dic['spare_time'] = 1
+            rec = recommend.get_2016_2017_2_XXK(user_id)
+            if rec:
+                dic['rank'] = rec
+            else:
+                dic['no_spare_time'] = 2
+                dic['spare_time'] = 0
             return render(req,'info_search/no_time_conflicit.html',dic,)
         if BH:
             response = HttpResponseRedirect('/online/detail_BH=%s/'%BH)
@@ -332,6 +344,8 @@ def user_cf(req):
             rec = s.avr_rating(start,10)
             dic['rank'] = rec
             print 'location_:user_cf__id_:02-06'
+        if first_log_in==0:
+            dic['first_log_in'] = 1
         return render(req,'recommend/tuijian.html',dic,)
     else:
         return HttpResponseRedirect('/online/user_cf')
@@ -610,7 +624,10 @@ def spare_time(req):
     if req.method == 'GET':
         username = str(req.user)
         user_id = data_base.get_user_id(username)
+        if 'close_help' in req.GET:
+            data_base.close_help(user_id)
         flag_dic = data_base.get_user_info_flag(user_id)
+        first_log_in = data_base.get_first_log_in_flag(user_id)
         dic = search.search_user_info(user_id)
         print 'location_:spare_time__id_:07-01'
         #if flag_dic['spare_time']:
@@ -629,6 +646,8 @@ def spare_time(req):
             print 'location_:spare_time__id_:07-04-01'
             return HttpResponseRedirect('/online/user_cf')
         print 'location_:spare_time__id_:07-05'
+        if first_log_in==0:
+            dic['first_log_in'] = 1 
         return render(req,'info_collect/spare_time_new.html',dic,)
     if req.method == 'POST':
         username = str(req.user)
@@ -644,9 +663,12 @@ def bind_id(req):
     print 'location_:bind_id__id_:08'
     username = str(req.user)
     user_id = data_base.get_user_id(username)
+    if 'close_help' in req.GET:
+        data_base.close_help(user_id)
     dic = {}
     if req.method == 'GET':
         print 'get in GET path'
+        first_log_in = data_base.get_first_log_in_flag(user_id)
         print 'location_:bind_id__id_:08-00'
         flag_dic = data_base.get_user_info_flag(user_id)
         print 'location_:bind_id__id_:08-01'
@@ -664,12 +686,16 @@ def bind_id(req):
             lst = result_dic['result']
             confirm = result_dic['confirm']
             dic['cou_lst']=lst
+            if first_log_in ==0:
+                dic['first_log_in'] = 1
             response = render(req,'bind_id.html',dic)
             response.set_cookie('confirm',confirm)
             print 'location_:bind_id__id_:08-04'
             return response
         else:
             print 'location_:bind_id__id_:08-05'
+            if first_log_in ==0:
+                dic['first_log_in'] = 1
             return render(req,'bind_id.html',dic)
     else:
         print 'get_in_POST_path'

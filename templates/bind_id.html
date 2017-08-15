@@ -11,17 +11,27 @@
 <div class="container">
             {% include "_messages.html" %}
         <div class="row clearfix">
-                    <div class="col-md-9 column">
-                        <div class="jumbotron">
+            <div class="col-md-9 column">
+                <div class="jumbotron">
 				<h1>
 				STEP 2：绑定学号
 				</h1>
 				<p>
 				绑定学号可以帮助您更便捷的填写评分信息，提升您的使用体验。
 				</p>
-</div>				
-</div>				
-</div>
+                </div>				
+            </div>				
+        </div>
+        {% ifequal first_log_in 1 %}
+        <div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">系统提示</h3>
+			</div>
+			<div class="panel-body">
+				检测到您初次登录此系统，帮助信息在页面最下方。
+			</div>
+		</div>
+        {% endifequal %}
 <div class="row clearfix">	
 		<div class="col-md-6 column">
 
@@ -57,6 +67,8 @@
     </fieldset>
     <br>
 	<input type="submit" class="btn btn-primary" value = "验证" />
+    <br>
+    <br>
 	{% endif %}	
 	
 </form>
@@ -84,9 +96,23 @@
 		{% if cou_lst %}
         <br>
 		<input type="submit" class="btn btn-primary" value = "下一步" />
+        <br>
+        <br>
 		{% endif %}
 		
 </form>
+
 </div>	
+</div>
+        {% ifequal first_log_in 1 %}
+        <div id="legend">
+            <legend>帮助信息</legend>
+        </div>
+        <p>
+        <a class="btn btn-warning" href="?close_help=1">关闭帮助信息</a><br><br>
+        </p>
+        <img class="img-responsive" src="/site_media/static/img/bind_id.png" alt="bind_id_help.png">
+        {% endifequal %}
+
 </div>
 {% endblock %}
