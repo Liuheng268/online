@@ -135,7 +135,7 @@ def get_user_id(user):
     return user_id
 def write_user_info(user):
     ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
-    ms.ExecNonQuery("insert into user_info (user_name,COL_NUM,COl_RATING,gra,fac,maj,spare_time,bind_id) values (%r,%d,%d,NULL,NULL,NULL,NULL,NULL)"%(user,0,0))
+    ms.ExecNonQuery("insert into user_info (user_name,first_log_in,COl_RATING,gra,fac,maj,spare_time,bind_id) values (%r,%d,%d,NULL,NULL,NULL,NULL,NULL)"%(user,0,0))
     print 'location_:sign_up_online_data_base_write_user_info__id_:00'
 def delete_user_info(user_name):
     ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
