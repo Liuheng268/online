@@ -355,6 +355,9 @@ def item_cf(req):
     print 'location_:item_cf__id_:03'
     username = str(req.user)
     user_id = data_base.get_user_id(username)
+    if 'close_help' in req.GET:
+        data_base.close_help(user_id)
+    first_log_in = data_base.get_first_log_in_flag(user_id)
     dic = search.search_user_info(user_id)
     if req.method == 'GET':
         if 'a' in req.GET:
@@ -369,14 +372,18 @@ def item_cf(req):
         no_time_conflicit =req.GET.get('no_time_conflicit')
         print 'location_:item_cf__id_:03-01'
         if no_time_conflicit:
-            rec = recommend.get_2016_2017_2_XXK(user_id)
-            dic['rank'] = rec
             print 'location_:item_cf__id_:03-02'
             flag = data_base.get_spare_time_flag(user_id)
             if flag ==0:
                 dic['no_spare_time'] = 1
             else:
                 dic['spare_time'] = 1
+            rec = recommend.get_2016_2017_2_XXK(user_id)
+            if rec:
+                dic['rank'] = rec
+            else:
+                dic['no_spare_time'] = 2
+                dic['spare_time'] = 0
             return render(req,'info_search/no_time_conflicit.html',dic,)
         if BH:
             response = HttpResponseRedirect('/online/detail_BH=%s/'%BH)
@@ -405,6 +412,8 @@ def item_cf(req):
             rec = s.avr_rating(start,10)
             dic['rank'] = rec
         print 'location_:item_cf__id_:03-06'
+        if first_log_in==0:
+            dic['first_log_in'] = 1
         return render(req,'recommend/item_cf.html',dic,)
     else:
         return HttpResponseRedirect('/online/item_cf')        
