@@ -125,7 +125,6 @@ def user_info_update_COL_RATING(user_id):
     
 def get_user_id(user):
     ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
-    #服务器停止服务后再次开启，下面的查询语句会导致服务器卡死？原因未找到
     m=ms.ExecQuery("select user_id from user_info where user_name=%r"%user)
     try:
         user_id = m[0][0]
@@ -135,7 +134,7 @@ def get_user_id(user):
     return user_id
 def write_user_info(user):
     ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
-    ms.ExecNonQuery("insert into user_info (user_name,COL_NUM,COl_RATING,gra,fac,maj,spare_time,bind_id) values (%r,%d,%d,NULL,NULL,NULL,NULL,NULL)"%(user,0,0))
+    ms.ExecNonQuery("insert into user_info (user_name,first_log_in,COl_RATING,gra,fac,maj,spare_time,bind_id) values (%r,%d,%d,NULL,NULL,NULL,NULL,NULL)"%(user,0,0))
     print 'location_:sign_up_online_data_base_write_user_info__id_:00'
 def delete_user_info(user_name):
     ms = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")
@@ -223,8 +222,8 @@ def update_bind_id(user_id,bind_id):
         ZYMC = NJ_ZYMC[0][1].encode('utf-8')
         NJ = NJ_ZYMC[0][0]
     except:
-        ZYMC = u'电气工程及其自动化'.encode('utf-8')
-        NJ = 2015
+        ZYMC = u'读取专业出错'.encode('utf-8')
+        NJ = 0
     print 'location_:online_data_base_update_bind_id__id_:11-02'
     fac_maj = ms.ExecQuery("select YXBH,ZYBH from maj_info where ZYMC ='%s'"%ZYMC)
     try:
@@ -234,7 +233,7 @@ def update_bind_id(user_id,bind_id):
         fac = 001
         maj = 001
     print 'location_:online_data_base_update_bind_id__id_:11-03'
-    ms1 = MSSQL(host="localhost",user="sa",pwd="123456",db="xuanke")  
+    ms1 = MSSQL(host="localhost",user="%s"%dbo_user,pwd="%s"%dbo_password,db="xuanke")  
     ms1.ExecNonQuery("update user_info set gra = %s,fac = %s,maj = %s,bind_id = %s where user_id = %d"%(NJ,fac,maj,bind_id,user_id))
     print 'location_:online_data_base_update_bind_id__id_:11-04'
 

@@ -644,10 +644,9 @@ def bind_id(req):
     print 'location_:bind_id__id_:08'
     username = str(req.user)
     user_id = data_base.get_user_id(username)
+    dic = {}
     if req.method == 'GET':
         print 'get in GET path'
-        # 获得个人信息并创建网页信息字典
-        dic = search.search_user_info(user_id)
         print 'location_:bind_id__id_:08-00'
         flag_dic = data_base.get_user_info_flag(user_id)
         print 'location_:bind_id__id_:08-01'
