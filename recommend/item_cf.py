@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
-
+import numpy
 import heapq
 import math
 import operator
@@ -23,7 +23,7 @@ def __pre_treat(train, implicit):
         _avr = {}
         for item, users in _item_users.iteritems():
             _avr[item] = sum(users.itervalues()) / len(users)
-
+    #print _item_users
 
 def item_similarity_cosine(train, norm=False, iuf=False, implicit=False):
     """
@@ -52,6 +52,7 @@ def item_similarity_cosine(train, norm=False, iuf=False, implicit=False):
     for i, related_items in c.iteritems():
         _w[i] = []
         for j, cij in related_items.iteritems():
+            #print cij,n[i],n[j],math.sqrt(n[i] * n[j])
             _w[i].append([j, cij / math.sqrt(n[i] * n[j])])
         if norm:
             norm_value = max(abs(item[1]) for item in _w[i])
@@ -60,7 +61,42 @@ def item_similarity_cosine(train, norm=False, iuf=False, implicit=False):
                     item[1] /= norm_value
         _w[i].sort(key=operator.itemgetter(1), reverse=True)
 
-
+def item_similarity_cosine_single(train, user, norm=False, iuf=False, implicit=False):
+    """
+    通过余弦相似度计算物品i和j的相似度
+    :param train: 训练集
+    :param norm: 是否归一化
+    :param iuf: 是否惩罚热门物品
+    :param implicit: 训练集类型
+    """
+    __pre_treat(train, implicit)
+    c = {}
+    n = {}
+    for items in _user_items.itervalues():
+        iuf_value = math.log(1 + len(items))
+        for i, ri in items.iteritems():
+            n.setdefault(i, 0)
+            n[i] += ri ** 2
+            c.setdefault(i, {})
+            for j, rj in items.iteritems():
+                if i == j:
+                    continue
+                c[i].setdefault(j, 0)
+                c[i][j] += ri * rj if not iuf else ri * rj / iuf_value
+    global _w
+    _w = {}
+    for i in _user_items[user].keys():
+        _w[i] = []
+        for j, cij in c[i].iteritems():
+            #print cij,n[i],n[j],math.sqrt(n[i] * n[j])
+            _w[i].append([j, cij / math.sqrt(n[i] * n[j])])
+        if norm:
+            norm_value = max(abs(item[1]) for item in _w[i])
+            if norm_value:
+                for item in _w[i]:
+                    item[1] /= norm_value
+        _w[i].sort(key=operator.itemgetter(1), reverse=True)
+        
 def item_similarity_jaccard(train, norm=False, iuf=False, implicit=False):
     """
     通过Jaccard相似度计算物品i和j的相似度
