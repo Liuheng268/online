@@ -17,19 +17,26 @@ def re_user_cf(start,user,n):
     #获取原始训练集
     train = data_base.re_get_train()
     #过滤无效信息的有效训练集
-    train = screening_training_set(train,threshold = 0.1)
+    train = screening_training_set(train,threshold = 0.4)
     #如果有效训练集中不含当前用户，则添加当前用户评分到训练集中备用
+    '''
     if user not in train.keys():
         print 'user not in screening_training_set'
         user_rating = data_base.get_user_rating(user)
         train[user] = user_rating
         print 'adding user rating successfully'
+    '''
+    if user not in train.keys():
+        rank = {}
+        rank['invalid_rating'] = 1
+        return rank
     user_cf.pre_treat(train, False)
-    user_cf.user_similarity_cosine(train, iif=False, implicit=False)
+    user_cf.user_similarity_cosine(train, iif=True, implicit=False)
     result = user_cf.recommend_explicit(user)
     if result =='less_than_standard':
-        rec = 'less_than_standard'
-        return rec
+        rank = {}
+        rank['less_than_standard'] = 1
+        return rank
     else:
         new_rank = Course_filtering(user,result)
         
@@ -43,18 +50,25 @@ def re_lfm(start,user,n):
     #获取原始训练集
     train = data_base.re_get_train()
     #过滤无效信息的有效训练集
-    train = screening_training_set(train,threshold = 0.1)
+    train = screening_training_set(train,threshold = 0.4)
     #如果有效训练集中不含当前用户，则添加当前用户评分到训练集中备用
+    '''
     if user not in train.keys():
         print 'user not in screening_training_set'
         user_rating = data_base.get_user_rating(user)
         train[user] = user_rating
         print 'adding user rating successfully'
+    '''
+    if user not in train.keys():
+        rank = {}
+        rank['invalid_rating'] = 1
+        return rank
     lfm.factorization(train, bias=True, svd=True, svd_pp=True, steps=5, gamma=0.03, slow_rate=0.94, Lambda=0.1)
     result = lfm.recommend_explicit(user)
-    if result ==[]:
-        rec = 'less_than_standard'
-        return rec
+    if result =='less_than_standard':
+        rank = {}
+        rank['less_than_standard'] = 1
+        return rank
     else:
         new_rank = Course_filtering(user,result)
         rank_lst = transfer_lst(start,n,new_rank)
@@ -64,22 +78,32 @@ def re_lfm(start,user,n):
 
 def re_item_cf(start,user,n):
     train = data_base.re_get_train()
+    #train = get_train()
     #过滤无效信息的有效训练集
-    train = screening_training_set(train,threshold = 0.1)
+    train = screening_training_set(train,threshold = 0.4)
     #如果有效训练集中不含当前用户，则添加当前用户评分到训练集中备用
+    '''
     if user not in train.keys():
         print 'user not in screening_training_set'
         user_rating = data_base.get_user_rating(user)
         train[user] = user_rating
         print 'adding user rating successfully'
+    '''
+    if user not in train.keys():
+        rank = {}
+        rank['invalid_rating'] = 1
+        return rank
     item_cf.__pre_treat(train, False)
-    item_cf.item_similarity_cosine(train, iuf=False, implicit=False)
+    item_cf.item_similarity_cosine(train, iuf=True, implicit=False)
+    #item_cf.item_similarity_cosine_single(train, user, iuf=False, implicit=False)
     result = item_cf.recommend_explicit(user)
+    #print list(result['rank'])
     rank1 = result['rank']
     explain = result['explain']
     if rank1 ==[]:
-        rec = 'less_than_standard'
-        return rec
+        rank = {}
+        rank['less_than_standard'] = 1
+        return rank
     else:
         rank2 = Course_filtering(user,rank1)
         rank3 = transfer_lst(start,n,rank2)

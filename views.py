@@ -285,6 +285,9 @@ def user_cf(req):
     print 'location_:user_cf__id_:02'
     username = str(req.user)
     user_id = data_base.get_user_id(username)
+    if 'update_rating' in req.GET:
+        col_rat.update_COL_RATING_delete(user_id)
+        return HttpResponseRedirect('/online/col_rat')
     if 'close_help' in req.GET:
         data_base.close_help(user_id)
     first_log_in = data_base.get_first_log_in_flag(user_id)
@@ -327,7 +330,12 @@ def user_cf(req):
             start = int(opt)
         rec = recommend.re_user_cf(start,user_id,10)
         print 'location_:user_cf__id_:02-04'
-        if rec =='less_than_standard' :
+        if 'invalid_rating' in rec:
+            dic['invalid_rating'] = 1
+            if first_log_in==0:
+                dic['first_log_in'] = 1
+            return render(req,'recommend/tuijian.html',dic,)
+        if 'less_than_standard' in rec :
             dic['error'] = 1
             dic['notworked'] = 1
             s = search.SEARCH()
@@ -395,7 +403,12 @@ def item_cf(req):
             start = int(opt)
         rec = recommend.re_item_cf(start,user_id,10)
         print 'location_:item_cf__id_:03-04'
-        if rec =='less_than_standard' :
+        if 'invalid_rating' in rec:
+            dic['invalid_rating'] = 1
+            if first_log_in==0:
+                dic['first_log_in'] = 1
+            return render(req,'recommend/item_cf.html',dic,)
+        if 'less_than_standard' in rec:
             dic['error'] = 1
             dic['notworked'] = 1
             s = search.SEARCH()
@@ -423,6 +436,9 @@ def lfm(req):
     print 'location_:lfm__id_:02'
     username = str(req.user)
     user_id = data_base.get_user_id(username)
+    if 'close_help' in req.GET:
+        data_base.close_help(user_id)
+    first_log_in = data_base.get_first_log_in_flag(user_id)
     if req.method == 'GET':
         # 获取翻页信息
         if 'a' in req.GET:
@@ -458,7 +474,12 @@ def lfm(req):
             start = int(opt)
         rec = recommend.re_lfm(start,user_id,10)
         print 'location_:lfm__id_:02-04'
-        if rec =='less_than_standard' :
+        if 'invalid_rating' in rec:
+            dic['invalid_rating'] = 1
+            if first_log_in==0:
+                dic['first_log_in'] = 1
+            return render(req,'recommend/tuijian.html',dic,)
+        if 'less_than_standard' in rec:
             dic['error'] = 1
             dic['notworked'] = 1
             s = search.SEARCH()
@@ -475,6 +496,8 @@ def lfm(req):
             rec = s.avr_rating(start,10)
             dic['rank'] = rec
             print 'location_:lfm__id_:02-06'
+        if first_log_in==0:
+            dic['first_log_in'] = 1
         return render(req,'recommend/tuijian.html',dic,)
     else:
         return HttpResponseRedirect('/online/lfm')

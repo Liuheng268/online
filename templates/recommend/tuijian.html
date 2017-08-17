@@ -23,7 +23,22 @@
              </div>
 				
                 
-                
+    {% ifequal invalid_rating 1 %}
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">系统提示</h3>
+			</div>
+			<div class="panel-body">
+				<h4>很抱歉！您的评分数据标准差小于基准值，无法为您生成推荐结果。<br>在评分时请尽可能根据您对课程的喜爱程度打分。例如:给您最喜欢的课程打5分,其次的打4分。给您最不喜欢的课程打1分，其次的打2分。谢谢您的理解。
+                </h4>
+                <p>
+                <a href="?update_rating=1" class="btn btn-success" >更改空闲时间</a>
+                </p>
+            </div>
+            
+		</div>
+		
+	{% endifequal %}            
 	{% ifequal error 1 %}
 		<div class="panel panel-danger">
 			<div class="panel-heading">
@@ -130,7 +145,7 @@
                 <p>推荐算法2：
                     <a class="btn btn-success" href="/online/lfm">基于隐语义算法的推荐</a> 
                 </p>
-                <p>其他信息：
+                <p>其他 信息 ：
                     <a class="btn btn-primary" href="?no_time_conflicit=1">所有无时间冲突课程</a>
                     <a class="btn btn-primary" href="/online/avr_rating?maj_avr=1">您所在专业热门课程</a>                  
                     <a class="btn btn-primary" href="/online/avr_rating">更多信息查询入口</a>
