@@ -10,7 +10,8 @@
 				<h3 class="panel-title">系统提示</h3>
 			</div>
 			<div class="panel-body">
-				您未添加空闲时间，请添加后再查看无时间冲突的所有选修课。
+				<p>您未添加无课时间，请添加后再查看无时间冲突的所有选修课。<br></p>
+                <p><a class="btn btn-success" href="/online/spare_time">添加无课时间</a></p>
 			</div>
 		</div>
 {% endifequal %}
@@ -20,14 +21,15 @@
 				<h3 class="panel-title">系统提示</h3>
 			</div>
 			<div class="panel-body">
-				经筛选，您添加的空闲时间内没有选修课。请重新填写空课信息。
+				<p>经筛选，您添加的空闲时间内没有选修课。请重新填写空课信息。<br></p>
+                <p><a class="btn btn-success" href="/online/spare_time">修改无课时间</a></p>
 			</div>
 		</div>
 {% endifequal %}
 
 {% ifequal spare_time 1 %}
 		<div id="legend">
-			<legend>无时间冲突课程列表</legend>
+			<legend>无时间冲突选修课列表</legend>
 		</div>
         <div class="table-responsive">
 			<table class="table table-striped">

@@ -21,13 +21,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     #url(r'^pachong/$',views.pachong,name = 'pachong'),
     url(r'^$',views.bind_id,name = 'bind_id'),
-    url(r'^col_fac/$',views.col_fac,name = 'col_fac'),
-    url(r'^col_maj/$',views.col_maj,name = 'col_maj'),
     url(r'^col_rat/$',views.col_rating_new,name = 'col_rat'),
     url(r'^user_cf/$',views.user_cf,name = 'user_cf'),
     url(r'^item_cf/$',views.item_cf,name = 'item_cf'),
     url(r'^lfm/$',views.lfm,name = 'lfm'),
-    url(r'^xuanke/$',views.xuanke,name = 'xuanke'),
     url(r'^base_info/$',views.base_info,name = 'base'),
     url(r'^avr_rating/$',views.avr_rating,name = 'avr_rating'),
     url(r'^cou_info/$',views.cou_info,name = 'cou_info'),
